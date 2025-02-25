@@ -3,6 +3,7 @@ package com.employeepayroll.controller;
 import com.employeepayroll.dto.EmployeeDTO;
 import com.employeepayroll.model.Employee;
 import com.employeepayroll.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,42 +14,43 @@ import java.util.Optional;
 
 
 @RestController
+@Slf4j
 @RequestMapping("/employeepayrollservice")
 public class EmployeeController {
-    Logger logger = Logger.getLogger(EmployeeController.class);
+
     @Autowired
     EmployeeService employeeService;
     //To get all the employees
     @GetMapping
-    public List<Employee> getAllEmployees(){
-        logger.info("All employee list end point called");
+    public List<EmployeeDTO> getAllEmployees(){
+        log.info("All employee list end point called");
         return employeeService.getAllEmployee();
     }
 
     //TO get employee with id
     @GetMapping("/get/{id}")
-    public Optional<Employee> getEmployeeById(@PathVariable Long id){
-        logger.info("specific employee list end point called");
+    public Optional<EmployeeDTO> getEmployeeById(@PathVariable Long id){
+        log.info("specific employee list end point called");
         return employeeService.getEmployeeById(id);
     }
 
     @PostMapping("/create")
-    public Employee addEmployee(@RequestBody EmployeeDTO employeeDTO){
-        logger.info("member created");
+    public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employeeDTO){
+        log.info("member created");
         return employeeService.addEmployee(employeeDTO);
     }
 
     //Update the employee
     @PutMapping("/update/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO){
-        logger.info("Employee updation endpoint called");
+    public EmployeeDTO updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO){
+        log.info("Employee updation endpoint called");
         return employeeService.updateEmployee(id,employeeDTO);
     }
 
     //Delete the employee
     @DeleteMapping("/delete/{id}")
     public void deleteEmployee(@PathVariable Long id){
-        logger.info("employee deletion endpint called");
+        log.info("employee deletion endpint called");
         employeeService.deleteEmployee(id);
     }
 
