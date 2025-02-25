@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,36 +24,56 @@ public class EmployeeController {
     EmployeeService employeeService;
     //To get all the employees
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees(){
-        log.info("All employee list end point called");
-        return employeeService.getAllEmployee();
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        log.info("All employee list endpoint called");
+
+        List<EmployeeDTO> employees = employeeService.getAllEmployee();
+        if (employees.isEmpty()) {
+            log.warn("No employees found");
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(employees);
     }
 
     //TO get employee with id
     @GetMapping("/get/{id}")
-    public Optional<EmployeeDTO> getEmployeeById(@PathVariable Long id){
+    public ResponseEntity<Optional<EmployeeDTO>> getEmployeeById(@PathVariable Long id){
         log.info("specific employee list end point called");
-        return employeeService.getEmployeeById(id);
+        Optional<EmployeeDTO> employeeDTO=employeeService.getEmployeeById(id);
+        if(employeeDTO.isEmpty()){
+            log.warn("No employee found with this " + id + " id");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(employeeDTO);
     }
 
     @PostMapping("/create")
-    public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employeeDTO){
+    public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO){
         log.info("member created");
-        return employeeService.addEmployee(employeeDTO);
+        EmployeeDTO employeeDTO1 = employeeService.addEmployee(employeeDTO);
+        return ResponseEntity.ok(employeeDTO1);
     }
 
     //Update the employee
     @PutMapping("/update/{id}")
-    public EmployeeDTO updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO){
-        log.info("Employee updation endpoint called");
-        return employeeService.updateEmployee(id,employeeDTO);
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        log.info("Employee updation endpoint called for ID: {}", id);
+
+        EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
+        if (updatedEmployee != null) {
+            return ResponseEntity.ok(updatedEmployee);
+        } else {
+            log.warn("Employee not found with ID: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
+
 
     //Delete the employee
     @DeleteMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id){
-        log.info("employee deletion endpoint called");
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         return employeeService.deleteEmployee(id);
     }
+
 
 }

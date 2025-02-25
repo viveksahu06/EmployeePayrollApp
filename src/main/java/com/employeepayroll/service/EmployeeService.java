@@ -5,6 +5,8 @@ import com.employeepayroll.model.Employee;
 import com.employeepayroll.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -69,21 +71,24 @@ public class EmployeeService {
             log.info("Employee updated with ID: {}", id);
             return convertToDTO(updatedEmployee);
         } else {
-            log.error("Employee not found with ID: {}", id);
-            throw new RuntimeException("Employee not found with ID: " + id);
+
+            log.warn("Employee not found with ID: " + id);
+            return null;
         }
     }
 
     // Delete employee
-    public String deleteEmployee(Long id) {
+    public ResponseEntity<String> deleteEmployee(Long id) {
         log.warn("Deleting employee with ID: {}", id);
+
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
             log.info("Employee deleted with ID: {}", id);
-            return "Employee with id " + id + " deleted successful";
+            return ResponseEntity.ok("Employee with ID " + id + " deleted successfully");
         } else {
             log.error("Employee not found with ID: {}", id);
-            return "No employee found with this id " + id +" ";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No employee found with ID: " + id);
         }
     }
 
