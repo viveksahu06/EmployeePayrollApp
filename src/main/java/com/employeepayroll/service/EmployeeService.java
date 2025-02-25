@@ -22,6 +22,7 @@ public class EmployeeService {
         employee.setDepartment(employeeDTO.getDepartment());
         return employeeRepository.save(employee);
     }
+
     //To get all the employee
     public List<Employee> getAllEmployee() {
         return employeeRepository.findAll();
