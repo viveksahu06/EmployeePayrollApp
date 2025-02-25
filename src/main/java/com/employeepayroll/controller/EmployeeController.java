@@ -3,15 +3,19 @@ package com.employeepayroll.controller;
 import com.employeepayroll.dto.EmployeeDTO;
 import com.employeepayroll.model.Employee;
 import com.employeepayroll.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -48,7 +52,11 @@ public class EmployeeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO){
+    public ResponseEntity<?> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult result){
+        if(result.hasErrors()){
+
+            return ResponseEntity.badRequest().build();
+        }
         log.info("member created");
         EmployeeDTO employeeDTO1 = employeeService.addEmployee(employeeDTO);
         return ResponseEntity.ok(employeeDTO1);
@@ -56,8 +64,12 @@ public class EmployeeController {
 
     //Update the employee
     @PutMapping("/update/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<?> updateEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeDTO employeeDTO,BindingResult result) {
         log.info("Employee updation endpoint called for ID: {}", id);
+        if(result.hasErrors()){
+
+            return ResponseEntity.badRequest().build();
+        }
 
         EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
         if (updatedEmployee != null) {
