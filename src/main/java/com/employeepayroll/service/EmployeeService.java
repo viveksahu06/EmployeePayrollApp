@@ -75,14 +75,15 @@ public class EmployeeService {
     }
 
     // Delete employee
-    public void deleteEmployee(Long id) {
+    public String deleteEmployee(Long id) {
         log.warn("Deleting employee with ID: {}", id);
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
             log.info("Employee deleted with ID: {}", id);
+            return "Employee with id " + id + " deleted successful";
         } else {
             log.error("Employee not found with ID: {}", id);
-            throw new RuntimeException("Employee not found with ID: " + id);
+            return "No employee found with this id " + id +" ";
         }
     }
 
