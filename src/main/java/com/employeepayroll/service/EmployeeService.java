@@ -1,6 +1,7 @@
 package com.employeepayroll.service;
 
 import com.employeepayroll.dto.EmployeeDTO;
+import com.employeepayroll.exception.EmployeeNotFoundException;
 import com.employeepayroll.model.Employee;
 import com.employeepayroll.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class EmployeeService {
+public class EmployeeService  {
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -81,16 +82,16 @@ public class EmployeeService {
     public ResponseEntity<String> deleteEmployee(Long id) {
         log.warn("Deleting employee with ID: {}", id);
 
-        if (employeeRepository.existsById(id)) {
-            employeeRepository.deleteById(id);
-            log.info("Employee deleted with ID: {}", id);
-            return ResponseEntity.ok("Employee with ID " + id + " deleted successfully");
-        } else {
+        if (!employeeRepository.existsById(id)) {
             log.error("Employee not found with ID: {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No employee found with ID: " + id);
+            throw new EmployeeNotFoundException("No employee found with ID: " + id);
         }
+
+        employeeRepository.deleteById(id);
+        log.info("Employee deleted with ID: {}", id);
+        return ResponseEntity.ok("Employee with ID " + id + " deleted successfully");
     }
+
 
     // Convert Employee to EmployeeDTO
     private EmployeeDTO convertToDTO(Employee employee) {
