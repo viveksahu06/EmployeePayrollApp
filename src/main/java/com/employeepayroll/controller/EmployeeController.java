@@ -1,5 +1,6 @@
 package com.employeepayroll.controller;
 
+import com.employeepayroll.dto.EmployeeDTO;
 import com.employeepayroll.model.Employee;
 import com.employeepayroll.service.EmployeeService;
 import org.apache.log4j.Logger;
@@ -32,16 +33,16 @@ public class EmployeeController {
     }
 
     @PostMapping("/create")
-    public Employee addEmployee(@RequestBody Employee employee){
+    public Employee addEmployee(@RequestBody EmployeeDTO employeeDTO){
         logger.info("member created");
-        return employeeService.addEmployee(employee);
+        return employeeService.addEmployee(employeeDTO);
     }
 
     //Update the employee
     @PutMapping("/update/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee){
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO){
         logger.info("Employee updation endpoint called");
-        return employeeService.updateEmployee(id,employee);
+        return employeeService.updateEmployee(id,employeeDTO);
     }
 
     //Delete the employee

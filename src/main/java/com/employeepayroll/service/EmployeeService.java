@@ -1,5 +1,6 @@
 package com.employeepayroll.service;
 
+import com.employeepayroll.dto.EmployeeDTO;
 import com.employeepayroll.model.Employee;
 import com.employeepayroll.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,11 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     //save the employee
-    public Employee addEmployee(Employee employee){
+    public Employee addEmployee(EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setSalary(employeeDTO.getSalary());
+        employee.setDepartment(employeeDTO.getDepartment());
         return employeeRepository.save(employee);
     }
     //To get all the employee
@@ -25,14 +30,16 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
     //Update the employee
-    public Employee updateEmployee(Long id, Employee updatedEmployee){
+    public Employee updateEmployee(Long id, EmployeeDTO employeeDTO){
         Optional<Employee>optionalEmployee = employeeRepository.findById(id);
         if(optionalEmployee.isPresent()){
-            Employee employee = optionalEmployee.get();
-            employee.setName(updatedEmployee.getName());
-            employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setSalary(updatedEmployee.getSalary());
-
+              Employee employee = optionalEmployee.get();
+//            employee.setName(updatedEmployee.getName());
+//            employee.setDepartment(updatedEmployee.getDepartment());
+//            employee.setSalary(updatedEmployee.getSalary());
+            employee.setName(employeeDTO.getName());
+            employee.setSalary(employeeDTO.getSalary());
+            employee.setDepartment(employeeDTO.getDepartment());
             return employeeRepository.save(employee);
 
         }
