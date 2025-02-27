@@ -17,18 +17,20 @@ import java.util.Map;
 @ControllerAdvice
 public class EmployeeGlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){
-        log.error("Invalid method argument ");
-        Map<String, String>errors = new HashMap<>();
-        List<FieldError>fieldErrors = ex.getBindingResult().getFieldErrors();
-
-        for(int i=0; i< fieldErrors.size() ;i++){
-            String field =fieldErrors.get(i).getField();
-            String message= fieldErrors.get(i).getDefaultMessage();
-            errors.put(field, message);
+    public ResponseEntity<ResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
+        log.error("Invalid method argument");
+        // Extract field validation errors
+        Map<String, String> errors = new HashMap<>();
+        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        for (FieldError fieldError : fieldErrors) {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        // Create a ResponseDTO with validation errors
+        ResponseDTO response = new ResponseDTO("Validation failed", HttpStatus.BAD_REQUEST.value(), errors);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
     // Handle Employee Not Found Exception
     @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<ResponseDTO> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
