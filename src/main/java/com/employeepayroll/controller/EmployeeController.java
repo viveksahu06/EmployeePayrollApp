@@ -52,6 +52,13 @@ public class EmployeeController {
         return ResponseEntity.ok(updatedEmployee);
     }
 
+    //Get employee department wise
+    @GetMapping("/get/department/sales")
+    public ResponseEntity<List<EmployeeDTO>> getByDepartment(){
+        log.info("Getting employee with sales department");
+        return ResponseEntity.ok(employeeService.findByDepartment("sales"));
+    }
+
     // Delete employee
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {

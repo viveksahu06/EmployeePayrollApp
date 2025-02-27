@@ -100,6 +100,16 @@ public class EmployeeServiceImplementation implements EmployeeService {
         return ResponseEntity.ok("Employee with ID " + id + " deleted successfully");
     }
 
+    //Get the employee Department wise
+    public List<EmployeeDTO> findByDepartment(String department){
+        List<Employee>employees = employeeRepository.findByDepartment(department);
+        List<EmployeeDTO>employeeDTOS = new ArrayList<>();
+        for(Employee emp : employees){
+            employeeDTOS.add(convertToDTO(emp));
+        }
+        return employeeDTOS;
+    }
+
 
     // Convert Employee to EmployeeDTO
     private EmployeeDTO convertToDTO(Employee employee) {
@@ -118,4 +128,5 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employee.setProfilePic(employeeDTO.getProfilePic());
         return employee;
     }
+
 }

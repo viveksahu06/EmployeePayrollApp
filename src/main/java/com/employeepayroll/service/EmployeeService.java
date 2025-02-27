@@ -1,6 +1,8 @@
 package com.employeepayroll.service;
 
 import com.employeepayroll.dto.EmployeeDTO;
+import com.employeepayroll.model.Employee;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -12,4 +14,5 @@ public interface EmployeeService {
     Optional<EmployeeDTO> getEmployeeById(Long id);
     EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO);
     ResponseEntity<String> deleteEmployee(Long id);
+    List<EmployeeDTO> findByDepartment(String department);
 }
