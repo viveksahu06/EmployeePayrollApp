@@ -55,7 +55,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         if (optionalEmployee.isPresent()) {
             return Optional.of(convertToDTO(optionalEmployee.get()));
         } else {
-            return Optional.empty();
+            throw new EmployeeNotFoundException("Employee not found with " + id);
         }
     }
 
@@ -81,7 +81,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         } else {
 
             log.warn("Employee not found with ID: " + id);
-            return null;
+            throw new EmployeeNotFoundException("Employee not found with " + id);
         }
     }
 
