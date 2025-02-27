@@ -64,10 +64,14 @@ public class EmployeeService  {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
-            employee.setName(employeeDTO.getName());
-            employee.setSalary(employeeDTO.getSalary());
-            employee.setDepartment(employeeDTO.getDepartment());
-
+//            employee.setName(employeeDTO.getName());
+//            employee.setSalary(employeeDTO.getSalary());
+//            employee.setDepartment(employeeDTO.getDepartment());
+//            employee.setGender(employeeDTO.getGender());
+//            employee.setStartDate(employeeDTO.getStartDate());
+//            employee.setNote(employeeDTO.getNote());
+//            employee.setProfilePic(employeeDTO.getProfilePic());
+            employee = convertToEntity(employeeDTO);
             Employee updatedEmployee = employeeRepository.save(employee);
             log.info("Employee updated with ID: {}", id);
             return convertToDTO(updatedEmployee);
@@ -95,7 +99,7 @@ public class EmployeeService  {
 
     // Convert Employee to EmployeeDTO
     private EmployeeDTO convertToDTO(Employee employee) {
-        return new EmployeeDTO(employee.getName(), employee.getSalary(), employee.getDepartment());
+        return new EmployeeDTO(employee.getName(), employee.getSalary(), employee.getDepartment(), employee.getGender(),employee.getStartDate(), employee.getNote(), employee.getProfilePic());
     }
 
     // Convert EmployeeDTO to Employee
@@ -104,6 +108,10 @@ public class EmployeeService  {
         employee.setName(employeeDTO.getName());
         employee.setSalary(employeeDTO.getSalary());
         employee.setDepartment(employeeDTO.getDepartment());
+        employee.setGender(employeeDTO.getGender());
+        employee.setStartDate(employeeDTO.getStartDate());
+        employee.setNote(employeeDTO.getNote());
+        employee.setProfilePic(employeeDTO.getProfilePic());
         return employee;
     }
 }

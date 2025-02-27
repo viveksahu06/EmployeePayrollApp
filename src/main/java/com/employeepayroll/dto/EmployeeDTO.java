@@ -10,10 +10,15 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class EmployeeDTO {
     @NotEmpty(message = "Name is required cannot be empty")
     @Pattern(regexp = "^[A-Z][a-zA-Z\\s]+$", message = "Name must start with an uppercase letter and does not having any special character")
     private String name;
     private double salary;
     private String department;
+    private String gender;
+    private String startDate;
+    private String note;
+    private String profilePic;
 }

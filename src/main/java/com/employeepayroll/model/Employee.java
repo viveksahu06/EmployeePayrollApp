@@ -19,4 +19,8 @@ public class Employee {
     private String name;
     private double salary;
     private String department;
+    private String gender;
+    private String startDate;
+    private String note;
+    private String profilePic;
 }
